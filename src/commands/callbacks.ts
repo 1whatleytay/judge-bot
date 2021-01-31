@@ -1,7 +1,7 @@
 import { Message, MessageReaction, Snowflake } from 'discord.js'
 
-export type ReactionCallback = (reaction: MessageReaction, callbacks: Callbacks) => void
-export type ConversationCallback = (message: Message, callbacks: Callbacks) => void
+export type ReactionCallback = (reaction: MessageReaction, user: string) => void
+export type ConversationCallback = (message: Message) => void
 
 class Callback<T> {
     callback: T
@@ -38,7 +38,7 @@ export class Callbacks {
         delete this.conversations[id]
     }
 
-    react(reaction: MessageReaction) {
+    react(reaction: MessageReaction, user: string) {
         const id = reaction.message.id
         const callback = this.reactions[id]
 
@@ -46,9 +46,7 @@ export class Callbacks {
             return
         }
 
-        callback.callback(reaction, this)
-
-        delete this.reactions[id]
+        callback.callback(reaction, user)
     }
 
     invoke(message: Message) {
@@ -59,7 +57,7 @@ export class Callbacks {
             return
         }
 
-        callback.callback(message, this)
+        callback.callback(message)
 
         delete this.conversations[id]
     }

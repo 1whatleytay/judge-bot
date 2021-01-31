@@ -1,4 +1,4 @@
-import { Message, MessageEmbed, MessageReaction } from 'discord.js'
+import { Snowflake, Message, MessageEmbed, MessageReaction } from 'discord.js'
 import { Callbacks } from './callbacks'
 import { Language, properties, toLanguage } from '../execution/languages'
 import { RunInput } from '../execution'
@@ -54,7 +54,11 @@ export async function grabLanguage(
 
     const prompt = await message.channel.send(embed)
 
-    const success = (reaction: MessageReaction) => {
+    const success = (reaction: MessageReaction, user: Snowflake) => {
+        if (user === message.client.user.id) {
+            return
+        }
+
         const languages = Object.keys(properties) as Language[]
         const language = languages.find(x => properties[x].emoji === reaction.emoji.name)
 

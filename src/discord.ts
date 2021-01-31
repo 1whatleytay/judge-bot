@@ -13,7 +13,7 @@ export async function runDiscord() {
 
   client.on('ready', () => console.log('Ready.'))
   client.on('message', message => invoke(message, callbacks))
-  client.on('messageReactionAdd', reaction => callbacks.react(reaction))
+  client.on('messageReactionAdd', (reaction, user) => callbacks.react(reaction, user.id))
 
   await client.login(process.env.DISCORD_TOKEN)
 }
