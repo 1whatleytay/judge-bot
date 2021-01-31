@@ -1,24 +1,27 @@
-import { MessageEmbed, PartialTextBasedChannelFields } from 'discord.js'
+import { Message, MessageEmbed } from 'discord.js'
 
 import { Context } from './context'
 
-import { RunInput, runProgram, RunResult, RunStatus } from '../execution'
-
-import { runCommand } from './program'
+import { runCommand, sanitize } from './program'
 
 import { Problem, problems } from '../problems'
 
-async function execute(channel: PartialTextBasedChannelFields, input: RunInput, problem: Problem) {
+import { RunInput, runProgram, RunResult, RunStatus } from '../execution'
+
+async function execute(message: Message, input: RunInput, problem: Problem) {
     if (input.input.length) {
-        await channel.send('Cannot specify input for a judge command.')
+        await message.channel.send('Cannot specify input for a judge command.')
         return
     }
+
+    const loadingId = '805489619268272138'
+    const loadingIcon = message.client.emojis.cache.get(loadingId)
+
+    await message.react(loadingIcon)
 
     let casesSucceeded = 0
 
     let result: RunResult
-
-    const zeroWidth = '`\u200b`\u200b`'
 
     for (const test of problem.tests) {
         result = await runProgram({
@@ -49,7 +52,7 @@ async function execute(channel: PartialTextBasedChannelFields, input: RunInput, 
             })),
             ...(succeeded ? [] : [
                 {
-                    name: `Case #${casesSucceeded} Problem`,
+                    name: `Case ${casesSucceeded + 1} Problem`,
                     value: `${(() => {
                         switch (result.status) {
                             case RunStatus.Success: return '🔴 Wrong Answer'
@@ -62,14 +65,17 @@ async function execute(channel: PartialTextBasedChannelFields, input: RunInput, 
 
                 ...(result.result.length ? [
                     {
-                        name: `Case #${casesSucceeded} Output`,
-                        value: `\`\`\`\n${result.result.replace('```', zeroWidth)}\n\`\`\``
+                        name: `Case ${casesSucceeded + 1} Output`,
+                        value: `\`\`\`\n${sanitize(result.result, 10)}\n\`\`\``
                     }
                 ] : [])
             ])
         ])
 
-    await channel.send(embed)
+    const botId = message.client.user.id
+    await message.reactions.cache.get(loadingId)?.users.remove(botId)
+
+    await message.channel.send(embed)
 }
 
 export default async (context: Context) => {
@@ -81,7 +87,7 @@ export default async (context: Context) => {
         return
     }
 
-    const run = (channel: PartialTextBasedChannelFields, input: RunInput) => execute(channel, input, problem)
+    const run = (message: Message, input: RunInput) => execute(message, input, problem)
 
     await runCommand(context, run)
 }

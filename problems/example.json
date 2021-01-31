@@ -1,0 +1,26 @@
+{
+  "name": "",
+  "channel": "",
+
+  "example": true,
+
+  "description": {
+    "general": "",
+    "input": "",
+    "output": "",
+
+    "samples": [
+      {
+        "input": "",
+        "output": ""
+      }
+    ]
+  },
+
+  "tests": [
+    {
+      "input": "",
+      "output": ""
+    }
+  ]
+}

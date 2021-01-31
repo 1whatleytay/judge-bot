@@ -1,0 +1,52 @@
+{
+  "name": "Calculator",
+  "channel": "805261901680476211",
+
+  "description": {
+    "general": "Write a program that takes two numbers as input, and outputs the sum of the two numbers.",
+    "input": "Two numbers, within 0 and 127.",
+    "output": "One number, the sum of the two numbers.",
+
+    "samples": [
+      {
+        "input": "4 5",
+        "output": "9"
+      },
+      {
+        "input": "99 4",
+        "output": "103"
+      }
+    ]
+  },
+
+  "tests": [
+    {
+      "input": "4 5",
+      "output": "9"
+    },
+    {
+      "input": "99 4",
+      "output": "103"
+    },
+    {
+      "input": "7 9",
+      "output": "16"
+    },
+    {
+      "input": "120 120",
+      "output": "240"
+    },
+    {
+      "input": "66 120",
+      "output": "186"
+    },
+    {
+      "input": "1 1",
+      "output": "2"
+    },
+    {
+      "input": "0 0",
+      "output": "0"
+    }
+  ]
+}

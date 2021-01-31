@@ -1,11 +1,11 @@
-import { Message, MessageEmbed, MessageReaction, PartialTextBasedChannelFields } from 'discord.js'
+import { Message, MessageEmbed, MessageReaction } from 'discord.js'
 import { Callbacks } from './callbacks'
 import { Language, properties, toLanguage } from '../execution/languages'
 import { RunInput } from '../execution'
 
 import { Context } from './context'
 
-export type ExecuteCallback = (channel: PartialTextBasedChannelFields, input: RunInput) => void
+export type ExecuteCallback = (message: Message, input: RunInput) => void
 
 export class Source {
     source: string
@@ -59,21 +59,22 @@ export async function grabLanguage(
         const language = languages.find(x => properties[x].emoji === reaction.emoji.name)
 
         if (language) {
+            prompt.delete()
             callbacks.dropReaction(prompt.id)
 
             if (source) {
-                return callback(message.channel, {source, input, language})
+                return callback(message, {source, input, language})
             } else {
                 return grabProgram(message, callbacks, callback, language)
             }
         }
     }
 
+    callbacks.addReaction(prompt.id, success, () => prompt.react('❌'))
+
     for (const x of Object.values(properties)) {
         await prompt.react(x.emoji)
     }
-
-    callbacks.addReaction(prompt.id, success, () => prompt.react('❌'))
 }
 
 export async function grabProgram(
@@ -82,6 +83,8 @@ export async function grabProgram(
         'Send your program in another message wrapped like:\n\n\\`\\`\\`\ncode here\n\\`\\`\\`')
 
     const success = (message: Message) => {
+        prompt.delete()
+
         const program = extractProgram(message.content)
 
         if (!program) {
@@ -91,7 +94,7 @@ export async function grabProgram(
         program.language = program.language || language
 
         if (program.language) {
-            return callback(message.channel, program)
+            return callback(message, program)
         } else {
             return grabLanguage(message, callbacks, callback, program.source, program.input)
         }
@@ -119,5 +122,11 @@ export async function runCommand({ message, callbacks, remainder, params }: Cont
         return grabLanguage(message, callbacks, run, program.source, program.input)
     }
 
-    return run(message.channel, program)
+    return run(message, program)
+}
+
+export function sanitize(output: string, maxLength: number = 1000) {
+    const zeroWidth = '`\u200b`\u200b`'
+
+    return output.replace('```', zeroWidth).substring(0, maxLength) + (output.length > maxLength ? '...' : '')
 }

@@ -1,15 +1,18 @@
-import { MessageEmbed, PartialTextBasedChannelFields } from 'discord.js'
+import { Message, MessageEmbed } from 'discord.js'
 
-import { runCommand } from './program'
+import { sanitize, runCommand } from './program'
 
 import { Context } from './context'
 
 import { RunInput, runProgram, RunStatus } from '../execution'
 
-async function execute(channel: PartialTextBasedChannelFields, input: RunInput) {
-    const result = await runProgram(input)
+async function execute(message: Message, input: RunInput) {
+    const loadingId = '805489619268272138'
+    const loadingIcon = message.client.emojis.cache.get(loadingId)
 
-    const zeroWidth = '`\u200b`\u200b`'
+    await message.react(loadingIcon)
+
+    const result = await runProgram(input)
 
     const embed = new MessageEmbed()
         .setColor(result.status === RunStatus.Success ? 'DARK_GREEN' : 'DARK_RED')
@@ -22,9 +25,12 @@ async function execute(channel: PartialTextBasedChannelFields, input: RunInput) 
             }
         })())
         .setDescription(result.result.length ?
-            `\`\`\`\n${result.result.replace('```', zeroWidth)}\n\`\`\`` : 'Program exited.')
+            `\`\`\`\n${sanitize(result.result, 1500)}\n\`\`\`` : 'Program exited.')
 
-    await channel.send(embed)
+    const botId = message.client.user.id
+    await message.reactions.cache.get(loadingId)?.users.remove(botId)
+
+    await message.channel.send(embed)
 }
 
 export default async (context: Context) => {

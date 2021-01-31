@@ -1,5 +1,6 @@
 import Docker from 'dockerode'
 import Registry from './registry'
+import Semaphore from './semaphore'
 
 import MemoryStream from 'memorystream'
 
@@ -8,6 +9,7 @@ import { Language, properties } from './languages'
 // Global Variables :(((
 let docker: Docker
 let registry: Registry
+let semaphore: Semaphore
 
 // I feel like I'm struggling with typescript.
 let images: Record<Language, string> = {
@@ -37,6 +39,8 @@ export class RunResult {
 }
 
 export async function runProgram(program: RunInput): Promise<RunResult> {
+    await semaphore.take()
+
     try {
         const Image = images[program.language]
         if (!Image) {
@@ -107,11 +111,15 @@ export async function runProgram(program: RunInput): Promise<RunResult> {
         await registry.clean(inputFile)
         await container.remove()
 
+        await semaphore.leave()
+
         return {
             status: hitTimeout ? RunStatus.Timeout : (success ? RunStatus.Success : RunStatus.Error),
             result: body
         }
     } catch (e) {
+        await semaphore.leave()
+
         return {
             status: RunStatus.InternalError,
             result: e
@@ -158,8 +166,12 @@ export async function rebuildAllImages() {
 }
 
 export async function runDocker() {
+    const maxInstances = process.env.MAX_DOCKER_INSTANCES
+        ? parseInt(process.env.MAX_DOCKER_INSTANCES) : 3
+
     docker = new Docker()
     registry = new Registry(process.env.REGISTRY_LOCATION || 'temporary')
+    semaphore = new Semaphore(maxInstances)
 
     for (const language of Object.keys(properties) as Language[]) {
         images[language] = await getOrBuildImage(properties[language].imagePath)
