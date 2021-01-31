@@ -80,11 +80,11 @@ export async function runProgram(program: RunInput): Promise<RunResult> {
 
         setTimeout(async () => {
             if (!executionStopped) {
-                await container.stop()
+                executionStopped = true
 
-                console.log('Manually stopping container.')
+                await container.stop()
             }
-        }, 1000 * (process.env.MAX_EXECUTION_TIME ? parseInt(process.env.MAX_EXECUTION_TIME) : 20))
+        }, 1000 * (process.env.MAX_EXECUTION_TIME ? parseInt(process.env.MAX_EXECUTION_TIME) : 10))
 
         const outStream = new MemoryStream()
         container.modem.demuxStream(stream, outStream, outStream)

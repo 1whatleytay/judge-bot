@@ -18,39 +18,39 @@
             "input": "99 4",
             "output": "103"
           }
-        ],
-
-        "tests": [
-          {
-            "input": "4 5",
-            "output": "9"
-          },
-          {
-            "input": "99 4",
-            "output": "103"
-          },
-          {
-            "input": "7 9",
-            "output": "16"
-          },
-          {
-            "input": "120 120",
-            "output": "240"
-          },
-          {
-            "input": "66 120",
-            "output": "186"
-          },
-          {
-            "input": "1 1",
-            "output": "2"
-          },
-          {
-            "input": "0 0",
-            "output": "0"
-          }
         ]
-      }
+      },
+
+      "tests": [
+        {
+          "input": "4 5",
+          "output": "9"
+        },
+        {
+          "input": "99 4",
+          "output": "103"
+        },
+        {
+          "input": "7 9",
+          "output": "16"
+        },
+        {
+          "input": "120 120",
+          "output": "240"
+        },
+        {
+          "input": "66 120",
+          "output": "186"
+        },
+        {
+          "input": "1 1",
+          "output": "2"
+        },
+        {
+          "input": "0 0",
+          "output": "0"
+        }
+      ]
     }
   ]
 }
