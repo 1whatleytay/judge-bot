@@ -39,10 +39,7 @@ export function loadProblems(): Problem[] {
     const problems = fs
         .readdirSync(problemsDir)
         .map(loadAndParse)
-        .filter(x => {
-            console.log(x)
-            return x && !x.example
-        })
+        .filter(x => x && !x.example)
 
     return problems as Problem[]
 }

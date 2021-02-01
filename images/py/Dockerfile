@@ -1,5 +1,9 @@
 FROM python:3
 
-COPY . .
+RUN useradd -ms /bin/bash judge-bot
+USER judge-bot
+WORKDIR /home/judge-bot
+
+COPY bootstrap.sh .
 
 ENTRYPOINT ./bootstrap.sh
