@@ -42,7 +42,7 @@ export class Callbacks {
         const id = reaction.message.id
         const callback = this.reactions[id]
 
-        if (!callback) {
+        if (!callback || !callback.callback) {
             return
         }
 
@@ -53,7 +53,7 @@ export class Callbacks {
         const id = message.author.id
         const callback = this.conversations[id]
 
-        if (!callback) {
+        if (!callback || !callback.callback) {
             return
         }
 

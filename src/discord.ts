@@ -3,6 +3,15 @@ import { Client } from 'discord.js'
 import { invoke } from './commands'
 import { Callbacks } from './commands/callbacks'
 
+function tryValue<T>(func: () => T): T {
+  try {
+    return func()
+  } catch (e) {
+    console.error(e)
+    return null
+  }
+}
+
 export async function runDiscord() {
   if (!process.env.DISCORD_TOKEN) {
     throw new Error('Missing Token.')
@@ -12,8 +21,8 @@ export async function runDiscord() {
   const callbacks = new Callbacks()
 
   client.on('ready', () => console.log('Ready.'))
-  client.on('message', message => invoke(message, callbacks))
-  client.on('messageReactionAdd', (reaction, user) => callbacks.react(reaction, user.id))
+  client.on('message', message => tryValue(() => invoke(message, callbacks)))
+  client.on('messageReactionAdd', (reaction, user) => tryValue(() => callbacks.react(reaction, user.id)))
 
   await client.login(process.env.DISCORD_TOKEN)
 }
