@@ -76,9 +76,11 @@ export async function grabLanguage(
 
     callbacks.addReaction(prompt.id, success, () => prompt.react('❌'))
 
-    for (const x of Object.values(properties)) {
-        await prompt.react(x.emoji)
-    }
+    try {
+        for (const x of Object.values(properties)) {
+            await prompt.react(x.emoji)
+        }
+    } catch { }
 }
 
 export async function grabProgram(
