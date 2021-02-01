@@ -58,8 +58,6 @@ export class Callbacks {
         }
 
         callback.callback(message)
-
-        delete this.conversations[id]
     }
 
     expire<T>(callbacks: Record<string, Callback<T>>) {

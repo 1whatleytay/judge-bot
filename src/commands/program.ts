@@ -94,8 +94,10 @@ export async function grabProgram(
         const program = extractProgram(message.content)
 
         if (!program) {
-            return grabProgram(message, callbacks, callback, language)
+            return
         }
+
+        callbacks.dropConversation(message.author.id)
 
         program.language = program.language || language
 
