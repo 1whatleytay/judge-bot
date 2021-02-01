@@ -6,18 +6,17 @@ import MemoryStream from 'memorystream'
 
 import { Language, properties } from './languages'
 
+import os from 'os'
+import path from 'path'
+import fs from 'fs/promises'
+
 // Global Variables :(((
 let docker: Docker
 let registry: Registry
 let semaphore: Semaphore
 
 // I feel like I'm struggling with typescript.
-let images: Record<Language, string> = {
-    [Language.CPP]: undefined,
-    [Language.Java]: undefined,
-    [Language.Python]: undefined,
-    [Language.JavaScript]: undefined
-}
+let images: Partial<Record<Language, string>> = { }
 
 export enum RunStatus {
     Success,
@@ -27,13 +26,13 @@ export enum RunStatus {
     InternalError,
 }
 
-export class RunInput {
+export interface RunInput {
     language: Language
     source: string
     input: string
 }
 
-export class RunResult {
+export interface RunResult {
     status: RunStatus
     result: string
 }
@@ -78,31 +77,27 @@ export async function runProgram(program: RunInput): Promise<RunResult> {
             stderr: true
         })
 
-        await container.start()
-
-        let executionStopped = false
-
-        setTimeout(async () => {
-            if (!executionStopped) {
-                executionStopped = true
-
-                await container.stop()
-            }
-        }, 1000 * (process.env.MAX_EXECUTION_TIME ? parseInt(process.env.MAX_EXECUTION_TIME) : 10))
-
         const outStream = new MemoryStream()
         container.modem.demuxStream(stream, outStream, outStream)
 
         const chunks: Uint8Array[] = []
-        const body = await new Promise<string>((resolve, reject) => {
-            outStream.on('data', chunk => chunks.push(chunk))
+        outStream.on('data', chunk => chunks.push(chunk))
 
-            stream.on('error', reject)
-            stream.on('end', () => resolve(Buffer.concat(chunks).toString('utf8')))
-        })
+        await container.start()
 
-        const hitTimeout = executionStopped
-        executionStopped = true
+        let hitTimeout = false
+
+        setTimeout(async () => {
+            try {
+                hitTimeout = true
+
+                await container.stop({ t: 0 })
+            } catch { }
+        }, 1000 * parseInt(process.env.MAX_EXECUTION_TIME || '10'))
+        
+        await container.wait()
+
+        const body = Buffer.concat(chunks).toString('utf8')
 
         const state = await container.inspect()
         const success = state.State.ExitCode === 0
@@ -111,14 +106,16 @@ export async function runProgram(program: RunInput): Promise<RunResult> {
         await registry.clean(inputFile)
         await container.remove()
 
-        await semaphore.leave()
+        semaphore.leave()
 
         return {
             status: hitTimeout ? RunStatus.Timeout : (success ? RunStatus.Success : RunStatus.Error),
             result: body
         }
     } catch (e) {
-        await semaphore.leave()
+        console.log(e)
+
+        semaphore.leave()
 
         return {
             status: RunStatus.InternalError,
@@ -127,53 +124,108 @@ export async function runProgram(program: RunInput): Promise<RunResult> {
     }
 }
 
-async function buildImage(image: string): Promise<string> {
-    const stream = await docker.buildImage({
-        context: image,
-        src: ['Dockerfile', 'bootstrap.sh']
-    }, {
-        t: image
-    })
+async function pickDockerfile(context: string): Promise<string> {
+    const arch = os.arch()
 
-    await new Promise((resolve, reject) => {
-        docker.modem.followProgress(stream,
-            (err: any, res: any) => err ? reject(err) : resolve(res))
-    })
+    try {
+        const archDockerfile = `${arch}.dockerfile`
 
-    return image
+        const url = path.resolve(context, archDockerfile)
+        await fs.access(url)
+
+        return archDockerfile
+    } catch { }
+
+    return 'default.dockerfile'
 }
 
-async function getOrBuildImage(image: string) {
+function makeDockerTag(name: string): string {
+    return `judge-bot-${name}`
+}
+
+async function buildImage(name: string): Promise<string | undefined> {
+    const context = path.resolve('images', name)
+    const dockerfile = await pickDockerfile(context)
+
+    const tag = makeDockerTag(name)
+    
+    const stream = await docker.buildImage({
+        context,
+        src: [dockerfile, 'bootstrap.sh']
+    }, {
+        dockerfile,
+        t: tag
+    })
+
+    try {
+        await new Promise((resolve, reject) => {
+            stream.on('data', data => {
+                try {
+                    for (const part of data.toString('utf8').split('\r\n')) {
+                        if (JSON.parse(part.toString('utf8')).errorDetail) {
+                            reject()
+                        }
+                    }
+                } catch { }
+            })
+
+            docker.modem.followProgress(stream,
+                (err: any, res: any) => err ? reject(err) : resolve(res))
+        })
+
+        return tag
+    } catch {
+        return undefined
+    }
+}
+
+async function getOrBuildImage(name: string): Promise<string | undefined> {
     const images = await docker.listImages()
 
-    if (images.some(x => x.RepoTags.some(y => y === `${image}:latest`))) {
-        console.log(`Using existing container ${image}.`)
+    const tag = makeDockerTag(name)
 
-        return image
+    if (images.some(x => x.RepoTags.some(y => y === `${tag}:latest`))) {
+        return tag
     } else {
-        console.log(`Building container ${image}.`)
-
-        return await buildImage(image)
+        return buildImage(name)
     }
 }
 
-export async function rebuildAllImages() {
+// Returns array of languages that successfully rebuilt.
+export async function rebuildAllImages(): Promise<Language[]> {
     console.log('Rebuilding images...')
 
+    let languages: Language[] = []
+
     for (const language of Object.keys(properties) as Language[]) {
-        images[language] = await buildImage(properties[language].imagePath)
+        const image = await buildImage(properties[language].imageName)
+
+        if (image) {
+            images[language] = image
+
+            languages.push(language)
+        }
     }
+
+    return languages
 }
 
 export async function runDocker() {
-    const maxInstances = process.env.MAX_DOCKER_INSTANCES
-        ? parseInt(process.env.MAX_DOCKER_INSTANCES) : 3
+    const maxInstances = parseInt(process.env.MAX_DOCKER_INSTANCES || '3')
 
     docker = new Docker()
     registry = new Registry(process.env.REGISTRY_LOCATION || 'temporary')
     semaphore = new Semaphore(maxInstances)
 
+    console.log('Building images...')
     for (const language of Object.keys(properties) as Language[]) {
-        images[language] = await getOrBuildImage(properties[language].imagePath)
+        const image = await getOrBuildImage(properties[language].imageName)
+
+        if (image) {
+            console.log(`Built image for ${properties[language].commonName}.`)
+            images[language] = image
+        } else {
+            console.log(`Failed to build image for ${properties[language].commonName}.`)
+        }
     }
 }

@@ -3,6 +3,7 @@
     "module": "commonjs",
     "outDir": "build",
 
+    "strict": true,
     "sourceMap": true,
     "noImplicitAny": true,
     "removeComments": true,

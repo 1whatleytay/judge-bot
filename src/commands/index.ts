@@ -1,7 +1,7 @@
 import { Message } from 'discord.js'
 
-import { CommandType } from './context'
-import { Callbacks } from './callbacks'
+import { CommandType } from './utilities/context'
+import { Callbacks } from '../callbacks'
 
 import ping from './ping'
 import post from './post'

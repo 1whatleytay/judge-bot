@@ -1,17 +1,15 @@
 import { Message, MessageEmbed } from 'discord.js'
 
-import { sanitize, runCommand } from './program'
+import { sanitize, runCommand } from './utilities/program'
 
-import { Context } from './context'
+import { Context } from './utilities/context'
+import { addIndicator, dropIndicator } from './utilities/indicator'
 
 import { RunInput, runProgram, RunStatus } from '../execution'
 
 async function execute(message: Message, input: RunInput) {
     try {
-        const loadingId = '805489619268272138'
-        const loadingIcon = message.client.emojis.cache.get(loadingId)
-
-        await message.react(loadingIcon)
+        await addIndicator(message)
 
         const result = await runProgram(input)
 
@@ -32,8 +30,7 @@ async function execute(message: Message, input: RunInput) {
             .setDescription(result.result.length ?
                 `\`\`\`\n${sanitize(result.result, 1500)}\n\`\`\`` : 'Program exited.')
 
-        const botId = message.client.user.id
-        await message.reactions.cache.get(loadingId)?.users.remove(botId)
+        await dropIndicator(message)
 
         await message.channel.send(embed)
     } catch (e) {

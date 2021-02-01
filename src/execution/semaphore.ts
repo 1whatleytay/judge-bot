@@ -22,7 +22,7 @@ export default class Semaphore {
 
     leave() {
         if (this.queue.length) {
-            this.queue.shift()(undefined)
+            this.queue.shift()?.(undefined)
         } else {
             this.count--
         }

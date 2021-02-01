@@ -1,9 +1,9 @@
 import { Client } from 'discord.js'
 
 import { invoke } from './commands'
-import { Callbacks } from './commands/callbacks'
+import { Callbacks } from './callbacks'
 
-function tryValue<T>(func: () => T): T {
+function tryValue<T>(func: () => T): T | null {
   try {
     return func()
   } catch (e) {

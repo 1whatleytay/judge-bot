@@ -1,8 +1,8 @@
 import { Message } from 'discord.js'
 
-import { Callbacks } from './callbacks'
+import { Callbacks } from '../../callbacks'
 
-export class Context {
+export interface Context {
   message: Message
   callbacks: Callbacks
 

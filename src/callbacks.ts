@@ -9,8 +9,7 @@ class Callback<T> {
     expiry: number
 
     constructor(callback: T, expire?: VoidFunction) {
-        const expiry = process.env.CALLBACK_EXPIRY_TIMEOUT
-            ? parseInt(process.env.CALLBACK_EXPIRY_TIMEOUT) : (30 * 60)
+        const expiry = parseInt(process.env.CALLBACK_EXPIRY_TIMEOUT || `${30 * 60}`)
 
         this.callback = callback
         this.expire = expire
@@ -65,7 +64,9 @@ export class Callbacks {
             const conversation = callbacks[id]
 
             if (conversation.expiry < Date.now()) {
-                conversation?.expire()
+                try {
+                    conversation?.expire?.()
+                } catch { }
 
                 delete callbacks[id]
             }
@@ -78,8 +79,7 @@ export class Callbacks {
     }
 
     constructor() {
-        const timeout = process.env.CALLBACK_CLEAN_TIMEOUT
-            ? parseInt(process.env.CALLBACK_CLEAN_TIMEOUT) : (30 * 60)
+        const timeout = parseInt(process.env.CALLBACK_CLEAN_TIMEOUT || `${(30 * 60)}`)
 
         setInterval(this.clean, timeout * 1000)
     }

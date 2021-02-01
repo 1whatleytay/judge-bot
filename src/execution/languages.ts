@@ -5,10 +5,10 @@ export enum Language {
     JavaScript = 'js',
 }
 
-export class LanguageProperties {
+export interface LanguageProperties {
     commonName: string
     emoji: string
-    imagePath: string
+    imageName: string
 
     fileExtensions: string[] // preferred first
 }
@@ -18,7 +18,7 @@ export const properties: Record<Language, LanguageProperties> = {
         commonName: 'C/C++',
         emoji: '🇨',
 
-        imagePath: 'images/cpp',
+        imageName: 'cpp',
 
         fileExtensions: [ 'cpp', 'cxx', 'c++', 'c', 'h', 'hpp' ]
     },
@@ -26,7 +26,7 @@ export const properties: Record<Language, LanguageProperties> = {
         commonName: 'Java',
         emoji: '☕',
 
-        imagePath: 'images/java',
+        imageName: 'java',
 
         fileExtensions: [ 'java' ]
     },
@@ -34,7 +34,7 @@ export const properties: Record<Language, LanguageProperties> = {
         commonName: 'Python',
         emoji: '🐌',
 
-        imagePath: 'images/py',
+        imageName: 'py',
         
         fileExtensions: [ 'py', 'python' ]
     },
@@ -42,13 +42,13 @@ export const properties: Record<Language, LanguageProperties> = {
         commonName: 'JavaScript',
         emoji: '🇸',
 
-        imagePath: 'images/js',
+        imageName: 'js',
 
         fileExtensions: [ 'js' ]
     }
 }
 
-export function toLanguage(text: string): Language {
+export function toLanguage(text: string): Language | undefined {
     for (const language of Object.keys(properties) as Language[]) {
         const props = properties[language]
 
@@ -57,5 +57,5 @@ export function toLanguage(text: string): Language {
         }
     }
 
-    return null
+    return undefined
 }

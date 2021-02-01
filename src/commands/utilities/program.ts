@@ -1,13 +1,15 @@
 import { Snowflake, Message, MessageEmbed, MessageReaction } from 'discord.js'
-import { Callbacks } from './callbacks'
-import { Language, properties, toLanguage } from '../execution/languages'
-import { RunInput } from '../execution'
+
+import { Callbacks } from '../../callbacks'
+
+import { RunInput } from '../../execution'
+import { Language, properties, toLanguage } from '../../execution/languages'
 
 import { Context } from './context'
 
 export type ExecuteCallback = (message: Message, input: RunInput) => void
 
-export class Source {
+export interface Source {
     source: string
     language: string
 }
@@ -15,10 +17,15 @@ export class Source {
 export function parseSource(content: string): Source[] {
     const regex = /```(?<language>\w+)?\n(?<source>(.|\s)*?)\n```/g
 
-    let results: Source[] = [ ]
+    const results: Source[] = [ ]
 
-    let result
-    while (result = regex.exec(content)) {
+    while (true) {
+        const result = regex.exec(content)
+
+        if (!result || !result.groups) {
+            break
+        }
+        
         results.push({
             source: result.groups.source,
             language: result.groups.language
@@ -28,7 +35,7 @@ export function parseSource(content: string): Source[] {
     return results
 }
 
-export function extractProgram(content: string): RunInput {
+export function extractProgram(content: string): Partial<RunInput> | null {
     const source = parseSource(content)
 
     if (!source.length || source.length > 2 || (source.length === 2 && source[1].language)) {
@@ -45,7 +52,7 @@ export function extractProgram(content: string): RunInput {
 
 export async function grabLanguage(
     message: Message, callbacks: Callbacks, callback: ExecuteCallback, source?: string, input?: string) {
-    const description = Object.values(properties).map(x => `${x.emoji} ${x.commonName}`).join('\n')
+    const description = Object.values(properties).map(x => `${x.emoji} ${x.commonName}`).join('\n\n')
 
     const embed = new MessageEmbed()
         .setColor('DARK_AQUA')
@@ -55,7 +62,7 @@ export async function grabLanguage(
     const prompt = await message.channel.send(embed)
 
     const success = (reaction: MessageReaction, user: Snowflake) => {
-        if (user === message.client.user.id) {
+        if (user === message.client.user?.id) {
             return
         }
 
@@ -67,7 +74,7 @@ export async function grabLanguage(
             callbacks.dropReaction(prompt.id)
 
             if (source) {
-                return callback(message, {source, input, language})
+                return callback(message, {source, input: input || '', language})
             } else {
                 return grabProgram(message, callbacks, callback, language)
             }
@@ -97,12 +104,18 @@ export async function grabProgram(
             return
         }
 
+        const { source, input } = program
+
+        if (source === undefined || input === undefined) {
+            return message.channel.send('Internal error.')
+        }
+
         callbacks.dropConversation(message.author.id)
 
-        program.language = program.language || language
+        const baseLanguage = program.language || language
 
-        if (program.language) {
-            return callback(message, program)
+        if (baseLanguage) {
+            return callback(message, { source, input, language: baseLanguage })
         } else {
             return grabLanguage(message, callbacks, callback, program.source, program.input)
         }
@@ -116,21 +129,27 @@ export async function runCommand({ message, callbacks, remainder, params }: Cont
         return grabProgram(message, callbacks, run)
     }
 
-    const language = !params[0].startsWith('```') ? (toLanguage(params[0])) : null
-
     const program = extractProgram(remainder)
 
+    const baseLanguage = !params[0].startsWith('```') ? (toLanguage(params[0])) : undefined
+
     if (!program) {
-        return grabProgram(message, callbacks, run, language)
+        return grabProgram(message, callbacks, run, baseLanguage)
     }
 
-    program.language = language || program.language
+    const language = baseLanguage || program.language
 
-    if (!program.language) {
+    if (!language) {
         return grabLanguage(message, callbacks, run, program.source, program.input)
     }
 
-    return run(message, program)
+    const { source, input } = program
+
+    if (source === undefined || input === undefined) {
+        return message.channel.send('Internal error.')
+    }
+
+    return run(message, { source, input, language })
 }
 
 export function sanitize(output: string, maxLength: number = 1000) {

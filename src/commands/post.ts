@@ -1,6 +1,6 @@
 import { MessageEmbed, TextChannel } from 'discord.js'
 
-import { Context } from './context'
+import { Context } from './utilities/context'
 
 import { Problem, problems } from '../problems'
 
@@ -10,26 +10,26 @@ export default async ({ message, remainder }: Context) => {
         return
     }
 
-    const match = remainder.match(/<#(?<id>\d+)>/)
+    const missingChannel = 'Can\'t find channel.'
 
+    const match = remainder.match(/<#(?<id>\d+)>/)
     if (!match) {
-        await message.channel.send('Can\'t find channel id.')
-        return
+        return message.channel.send(missingChannel)
     }
 
-    const id = match.groups.id
-    const problem = problems.find(x => x.channel === id) as Problem
+    const id = match.groups?.id
+    if (!id) {
+        return message.channel.send(missingChannel)
+    }
 
+    const problem = problems.find(x => x.channel === id) as Problem
     if (!problem) {
-        await message.channel.send('No problem for this channel.')
-        return
+        return message.channel.send('No problem for this channel.')
     }
 
     const channel = (await message.client.channels.fetch(id)) as TextChannel
-
     if (!channel) {
-        await message.channel.send('Can\'t find channel id.')
-        return
+        return message.channel.send(missingChannel)
     }
 
     const embed = new MessageEmbed()

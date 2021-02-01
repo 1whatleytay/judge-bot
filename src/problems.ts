@@ -1,11 +1,11 @@
 import fs from 'fs'
 
-export class TestCase {
+export interface TestCase {
     input: string
     output: string
 }
 
-export class ProblemDescription {
+export interface ProblemDescription {
     general: string
     input: string
     output: string
@@ -13,7 +13,7 @@ export class ProblemDescription {
     samples: TestCase[]
 }
 
-export class Problem {
+export interface Problem {
     name: string
     channel: string
     example?: boolean
@@ -28,7 +28,7 @@ export function loadProblems(): Problem[] {
 
     const problemsDir = process.env.PROBLEMS_DIR || 'problems'
 
-    const loadAndParse = (file: string): Problem => {
+    const loadAndParse = (file: string): Problem | null => {
         try {
             return JSON.parse(fs.readFileSync(`${problemsDir}/${file}`).toString())
         } catch {

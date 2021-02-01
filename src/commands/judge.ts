@@ -1,8 +1,8 @@
 import { Message, MessageEmbed } from 'discord.js'
 
-import { Context } from './context'
-
-import { runCommand, sanitize } from './program'
+import { Context } from './utilities/context'
+import { runCommand, sanitize } from './utilities/program'
+import { addIndicator, dropIndicator } from './utilities/indicator'
 
 import { Problem, problems } from '../problems'
 
@@ -15,47 +15,43 @@ async function execute(message: Message, input: RunInput, problem: Problem) {
             return
         }
 
-        const loadingId = '805489619268272138'
-        const loadingIcon = message.client.emojis.cache.get(loadingId)
-
-        await message.react(loadingIcon)
+        await addIndicator(message)
 
         let casesSucceeded = 0
 
-        let result: RunResult
+        let failureResult: RunResult | null = null
 
         for (const test of problem.tests) {
-            result = await runProgram({
+            const run = await runProgram({
                 language: input.language,
                 source: input.source,
                 input: test.input
             })
 
-            if (result.status !== RunStatus.Success || result.result.trim() !== test.output.trim()) {
+            if (run.status !== RunStatus.Success || run.result.trim() !== test.output.trim()) {
+                failureResult = run
                 break
             }
 
             casesSucceeded++
         }
 
-        const succeeded = problem.tests.length === casesSucceeded
-
         // I'm sorry about addFields :/
         const embed = new MessageEmbed()
-            .setColor(succeeded ? 'DARK_GREEN' : 'DARK_RED')
-            .setTitle(`${problem.name} - Submission ${succeeded ? 'Success' : 'Failed'}`)
+            .setColor(failureResult ? 'DARK_RED' : 'DARK_GREEN')
+            .setTitle(`${problem.name} - Submission ${failureResult ? 'Failed' : 'Success'}`)
             .addFields([
-                ...problem.tests.map((test, index) => ({
+                ...problem.tests.map((_, index) => ({
                     name: `Case ${index + 1}`,
                     value: index > casesSucceeded
                         ? '⚠ Skipped' : (index === casesSucceeded ? '🔴 Failed' : '✅ Success'),
                     inline: true
                 })),
-                ...(succeeded ? [] : [
+                ...(failureResult ? [
                     {
                         name: `Case ${casesSucceeded + 1} Problem`,
                         value: `${(() => {
-                            switch (result.status) {
+                            switch (failureResult.status) {
                                 case RunStatus.Success:
                                     return '🔴 Wrong Answer'
                                 case RunStatus.Error:
@@ -68,17 +64,16 @@ async function execute(message: Message, input: RunInput, problem: Problem) {
                         })()}`
                     },
 
-                    ...(result.result.length ? [
+                    ...(failureResult.result.length ? [
                         {
                             name: `Case ${casesSucceeded + 1} Output`,
-                            value: `\`\`\`\n${sanitize(result.result, 10)}\n\`\`\``
+                            value: `\`\`\`\n${sanitize(failureResult.result, 10)}\n\`\`\``
                         }
                     ] : [])
-                ])
+                ] : [])
             ])
-
-        const botId = message.client.user.id
-        await message.reactions.cache.get(loadingId)?.users.remove(botId)
+            
+        await dropIndicator(message)
 
         await message.channel.send(embed)
     } catch (e) {
