@@ -33,7 +33,7 @@ async function execute(message: Message, input: RunInput, problem: Problem) {
             const run = await runProgram({
                 language: input.language,
                 source: input.source,
-                input: test.input
+                input: `${test.input}\n\n\n`
             })
 
             if (run.status !== RunStatus.Success || !passedTestCase(run.result, test.output)) {

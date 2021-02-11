@@ -1,0 +1,24 @@
+{
+  "name": "Hello World!",
+  "channel": "809525499348779088",
+
+  "description": {
+    "general": "Make a program that prints `Hello World!`. The bot will check to make sure capitalization is exact and that the exclamation mark is there.",
+    "input": "Nothing.",
+    "output": "`Hello World!`, exactly!",
+
+    "samples": [
+      {
+        "input": "...",
+        "output": "Hello World!"
+      }
+    ]
+  },
+
+  "tests": [
+    {
+      "input": "",
+      "output": "Hello World"
+    }
+  ]
+}
