@@ -15,7 +15,7 @@ export interface Source {
 }
 
 export function parseSource(content: string): Source[] {
-    const regex = /```(?<language>\w+)?\n(?<source>(.|\s)*?)\n```/g
+    const regex = /```(?<language>\w+)?(\n)?(?<source>(.|\s)*?)```/g
 
     const results: Source[] = [ ]
 
