@@ -44,8 +44,10 @@ export default async ({ message, remainder }: Context) => {
     for (let index = 0; index < problem.description.samples.length; index++) {
         const sample = problem.description.samples[index]
 
+        const explanationPostfix = sample.explanation ? `\n${sample.explanation}` : ''
+
         embed.addField(`Sample Input #${index + 1}`, `\`\`\`\n${sample.input}\n\`\`\``)
-        embed.addField(`Sample Output #${index + 1}`, `\`\`\`\n${sample.output}\n\`\`\``)
+        embed.addField(`Sample Output #${index + 1}`, `\`\`\`\n${sample.output}\n\`\`\`${explanationPostfix}`)
     }
 
     await channel.send(embed)

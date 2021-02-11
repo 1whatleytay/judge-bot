@@ -8,6 +8,14 @@ import { Problem, problems } from '../problems'
 
 import { RunInput, runProgram, RunResult, RunStatus } from '../execution'
 
+function passedTestCase(result: string, answer: string) {
+    const resultParts = result.trimRight().split('\n').map(x => x.trimRight())
+    const answerParts = answer.trimRight().split('\n').map(x => x.trimRight())
+
+    return (resultParts.length === answerParts.length)
+        && !resultParts.some((x, i) => x !== answerParts[i])
+}
+
 async function execute(message: Message, input: RunInput, problem: Problem) {
     try {
         if (input.input.length) {
@@ -28,7 +36,7 @@ async function execute(message: Message, input: RunInput, problem: Problem) {
                 input: test.input
             })
 
-            if (run.status !== RunStatus.Success || run.result.trim() !== test.output.trim()) {
+            if (run.status !== RunStatus.Success || !passedTestCase(run.result, test.output)) {
                 failureResult = run
                 break
             }

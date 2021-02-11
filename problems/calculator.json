@@ -3,9 +3,9 @@
   "channel": "805261901680476211",
 
   "description": {
-    "general": "Write a program that takes two numbers as input, and outputs the sum of the two numbers.",
-    "input": "Two numbers, within 0 and 127.",
-    "output": "One number, the sum of the two numbers.",
+    "general": "Write a program that takes two numbers, `n` and `m`, as inputs and outputs `n + m`.",
+    "input": "Integers `n` and `m` separated by spaces on the first line, where 0 ≤ `n` ≤ 127 and 0 ≤ `m` ≤ 127.",
+    "output": "One number, the sum of `n` and `m`.",
 
     "samples": [
       {
@@ -39,6 +39,14 @@
     {
       "input": "66 120",
       "output": "186"
+    },
+    {
+      "input": "22 22",
+      "output": "44"
+    },
+    {
+      "input": "22 23",
+      "output": "45"
     },
     {
       "input": "1 1",

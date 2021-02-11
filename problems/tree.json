@@ -3,9 +3,9 @@
   "channel": "805484358215401502",
 
   "description": {
-    "general": "Write a program to print n of lines, starting with n stars and decreasing by 1 star each line.",
-    "input": "One number, n, within 1 and 100. Generally the number ",
-    "output": "N lines, where line 1 has n stars, line 2 has (n - 1) stars, etc. until the program outputs line n with 1 star.",
+    "general": "Write a program to print `n` of lines, starting with n stars and decreasing by 1 star each line.",
+    "input": "One number, `n`, 1 ≤ `n` ≤ 100. Generally the number ",
+    "output": "N lines, where line 1 has `n` stars, line 2 has `n - 1` stars, etc. until the program outputs line `n` with 1 star.",
 
     "samples": [
       {

@@ -3,6 +3,7 @@ import fs from 'fs'
 export interface TestCase {
     input: string
     output: string
+    explanation?: string
 }
 
 export interface ProblemDescription {

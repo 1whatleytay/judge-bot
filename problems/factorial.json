@@ -4,8 +4,8 @@
 
   "description": {
     "general": "Write a program that takes one positive number and outputs the factorial of that number.",
-    "input": "One positive number, n. Where 0 < n < 14. Small...",
-    "output": "Any number, which is equal to the factorial of n.",
+    "input": "One positive number, `n`. Where 0 ≤ `n` ≤ 14.",
+    "output": "Any number, which is equal to the factorial of `n`.",
 
     "samples": [
       {

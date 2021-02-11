@@ -5,12 +5,13 @@
   "description": {
     "general": "Write a program that prints `n` vertical stacks of the character # of varying heights.",
     "input": "On the first line, the value `n` is provided, indicating the number of vertical stacks to print. On the following line, `n` numbers are provided, numbered `h(1)` through `h(n)`.",
-    "output": "`n` vertical stacks made of # characters printed next to each other. Stack x has a height of h(x). The hashes must be printed from bottom up (more hashes at lower lines, more spaces at higher lines). Each line must have `n` characters. The program must print max(h(1), h(2) ... h(n)) lines.",
+    "output": "`n` vertical stacks made of # characters printed next to each other. Stack `x` has a height of `h(x)`. The hashes must be printed from bottom up (more hashes at lower lines, more spaces at higher lines). Each line must have `n` characters.",
 
     "samples": [
       {
         "input": "3\n1 2 3",
-        "output": "  #\n ##\n###"
+        "output": "  #\n ##\n###",
+        "explanation": " * Note how there are 3 columns, each with 1, 2 and 3 `#` characters each."
       },
       {
         "input": "4\n4 7 5 6",

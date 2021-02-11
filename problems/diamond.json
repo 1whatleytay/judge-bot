@@ -3,9 +3,9 @@
   "channel": "809479981536247849",
 
   "description": {
-    "general": "Print the outline of a diamond with # characters where each side has length n.",
-    "input": "One integer, n, within 2 and 40.",
-    "output": "2n - 1 lines, comprised of spaces and hashes so that the output appears line a diamond where each side has length n. See samples for details.",
+    "general": "Print the outline of a diamond with # characters where each side has length `n`.",
+    "input": "One integer, `n`, where 1 ≤ `n` ≤ 30.",
+    "output": "Several lines of spaces and hashes so that the output appears line a diamond where each side has length `n`.",
 
     "samples": [
       {
@@ -38,7 +38,15 @@
     },
     {
       "input": "10",
-      "output": "         #         \n        # #        \n       #   #       \n      #     #      \n     #       #     \n    #         #    \n   #           #   \n  #             #  \n #               # \n#                 #\n #               # \n  #             #  \n   #           #   \n    #         #    \n     #       #     \n      #     #      \n       #   #       \n        # #        \n         #         \n"
+      "output": "         #         \n        # #        \n       #   #       \n      #     #      \n     #       #     \n    #         #    \n   #           #   \n  #             #  \n #               # \n#                 #\n #               # \n  #             #  \n   #           #   \n    #         #    \n     #       #     \n      #     #      \n       #   #       \n        # #        \n         #         "
+    },
+    {
+      "input": "14",
+      "output": "             #             \n            # #            \n           #   #           \n          #     #          \n         #       #         \n        #         #        \n       #           #       \n      #             #      \n     #               #     \n    #                 #    \n   #                   #   \n  #                     #  \n #                       # \n#                         #\n #                       # \n  #                     #  \n   #                   #   \n    #                 #    \n     #               #     \n      #             #      \n       #           #       \n        #         #        \n         #       #         \n          #     #          \n           #   #           \n            # #            \n             #             "
+    },
+    {
+      "input": "15",
+      "output": "              #              \n             # #             \n            #   #            \n           #     #           \n          #       #          \n         #         #         \n        #           #        \n       #             #       \n      #               #      \n     #                 #     \n    #                   #    \n   #                     #   \n  #                       #  \n #                         # \n#                           #\n #                         # \n  #                       #  \n   #                     #   \n    #                   #    \n     #                 #     \n      #               #      \n       #             #       \n        #           #        \n         #         #         \n          #       #          \n           #     #           \n            #   #            \n             # #             \n              #              "
     },
     {
       "input": "31",
