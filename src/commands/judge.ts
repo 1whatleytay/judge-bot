@@ -67,7 +67,7 @@ async function execute(message: Message, input: RunInput, problem: Problem) {
                     ...(failureResult.result.length ? [
                         {
                             name: `Case ${casesSucceeded + 1} Output`,
-                            value: `\`\`\`\n${sanitize(failureResult.result, 10)}\n\`\`\``
+                            value: `\`\`\`\n${sanitize(failureResult.result, 1000)}\n\`\`\``
                         }
                     ] : [])
                 ] : [])

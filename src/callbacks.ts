@@ -81,6 +81,6 @@ export class Callbacks {
     constructor() {
         const timeout = parseInt(process.env.CALLBACK_CLEAN_TIMEOUT || `${(30 * 60)}`)
 
-        setInterval(this.clean, timeout * 1000)
+        setInterval(() => this.clean(), timeout * 1000)
     }
 }

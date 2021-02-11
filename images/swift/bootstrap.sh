@@ -1,0 +1,1 @@
+swift /mnt/source.swift < /mnt/input.txt

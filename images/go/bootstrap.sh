@@ -1,0 +1,1 @@
+go run /mnt/source.go < /mnt/input.txt

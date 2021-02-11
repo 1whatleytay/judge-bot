@@ -1,8 +1,12 @@
 export enum Language {
     CPP = 'cpp',
     Java = 'java',
+    CSharp = 'cs',
     Python = 'py',
     JavaScript = 'js',
+    Go = 'go',
+    Rust = 'rust',
+    Swift = 'swift'
 }
 
 export interface LanguageProperties {
@@ -30,6 +34,14 @@ export const properties: Record<Language, LanguageProperties> = {
 
         fileExtensions: [ 'java' ]
     },
+    [Language.CSharp]: {
+        commonName: 'C#',
+        emoji: '#⃣',
+
+        imageName: 'cs',
+
+        fileExtensions: [ 'cs', 'c#' ]
+    },
     [Language.Python]: {
         commonName: 'Python',
         emoji: '🐌',
@@ -45,6 +57,30 @@ export const properties: Record<Language, LanguageProperties> = {
         imageName: 'js',
 
         fileExtensions: [ 'js' ]
+    },
+    [Language.Go]: {
+        commonName: 'Go',
+        emoji: '🇬',
+
+        imageName: 'go',
+
+        fileExtensions: [ 'go' ]
+    },
+    [Language.Rust]: {
+        commonName: 'Rust',
+        emoji: '⚙️',
+
+        imageName: 'rust',
+
+        fileExtensions: [ 'rs', 'rust' ]
+    },
+    [Language.Swift]: {
+        commonName: 'Swift',
+        emoji: '🐦',
+
+        imageName: 'swift',
+
+        fileExtensions: [ 'swift' ]
     }
 }
 

@@ -159,10 +159,11 @@ async function buildImage(name: string): Promise<string | undefined> {
 
     try {
         await new Promise((resolve, reject) => {
-            stream.on('data', data => {
+            stream.on('data', (data: Buffer) => {
                 try {
-                    for (const part of data.toString('utf8').split('\r\n')) {
-                        if (JSON.parse(part.toString('utf8')).errorDetail) {
+                    const parts = data.toString('utf8').split('\r\n')
+                    for (const part of parts) {
+                        if (JSON.parse(part).errorDetail) {
                             reject()
                         }
                     }

@@ -21,7 +21,7 @@ export default async ({ message }: Context) => {
 
     const embed = new MessageEmbed()
         .setColor('DARK_AQUA')
-        .setTitle('Rebuilt Containers')
+        .setTitle('Rebuilt Images')
         .setDescription(description)
 
     await dropIndicator(message)
