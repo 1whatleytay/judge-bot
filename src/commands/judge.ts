@@ -45,7 +45,7 @@ function makeCaseFields(tests: TestCase[], casesSucceeded: number) : EmbedFieldD
 
             fields.splice((tests.length - casesSucceeded - toRemove) / 2 + casesSucceeded, toRemove, {
                 name: '...',
-                value: '🔴 Failed',
+                value: '⚠ Skipped',
                 inline: true
             })
         }
