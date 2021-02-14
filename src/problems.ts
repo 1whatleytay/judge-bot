@@ -1,9 +1,17 @@
-import fs from 'fs'
+import fs from 'fs/promises'
+import path from 'path'
+
+export interface SampleCase {
+    input: string
+    output: string
+    explanation?: string
+}
 
 export interface TestCase {
     input: string
     output: string
-    explanation?: string
+
+    file?: boolean
 }
 
 export interface ProblemDescription {
@@ -11,7 +19,7 @@ export interface ProblemDescription {
     input: string
     output: string
 
-    samples: TestCase[]
+    samples: SampleCase[]
 }
 
 export interface Problem {
@@ -24,25 +32,52 @@ export interface Problem {
     tests: TestCase[]
 }
 
-export function loadProblems(): Problem[] {
+// Just check for missing files or duplicate files.
+export async function verify(problem: Problem): Promise<boolean> {
+    let files = [ ]
+
+    for (const test of problem.tests) {
+        if (test.file) {
+            const input = path.resolve('data', test.input)
+            const output = path.resolve('data', test.output)
+
+            files.push(input, output)
+
+            try {
+                await fs.access(input)
+                await fs.access(output)
+            } catch (e) {
+                return false
+            }
+        }
+    }
+
+    return new Set(files).size === files.length
+}
+
+export let problems: Problem[]
+
+export async function loadProblems(): Promise<Problem[]> {
     console.log('Loading problems...')
 
     const problemsDir = process.env.PROBLEMS_DIR || 'problems'
 
-    const loadAndParse = (file: string): Problem | null => {
+    const loadAndParse = async (file: string): Promise<Problem | null> => {
         try {
-            return JSON.parse(fs.readFileSync(`${problemsDir}/${file}`).toString())
+            const content = await fs.readFile(`${problemsDir}/${file}`)
+
+            return JSON.parse(content.toString())
         } catch {
             return null
         }
     }
 
-    const problems = fs
-        .readdirSync(problemsDir)
-        .map(loadAndParse)
-        .filter(x => x && !x.example)
+    const files = await fs.readdir(problemsDir)
+    const problems = (await Promise.all(files.map(loadAndParse))).filter(x => x && !x.example)
 
     return problems as Problem[]
 }
 
-export const problems = loadProblems()
+export async function reloadProblems() {
+    problems = await loadProblems()
+}

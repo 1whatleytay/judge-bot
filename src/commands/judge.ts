@@ -1,12 +1,15 @@
-import { Message, MessageEmbed } from 'discord.js'
+import { EmbedFieldData, Message, MessageEmbed } from 'discord.js'
 
 import { Context } from './utilities/context'
 import { runCommand, sanitize } from './utilities/program'
 import { addIndicator, dropIndicator } from './utilities/indicator'
 
-import { Problem, problems } from '../problems'
+import { Problem, problems, TestCase } from '../problems'
 
 import { RunInput, runProgram, RunResult, RunStatus } from '../execution'
+
+import fs from 'fs/promises'
+import path from 'path'
 
 function passedTestCase(result: string, answer: string) {
     const resultParts = result.trimRight().split('\n').map(x => x.trimRight())
@@ -14,6 +17,41 @@ function passedTestCase(result: string, answer: string) {
 
     return (resultParts.length === answerParts.length)
         && !resultParts.some((x, i) => x !== answerParts[i])
+}
+
+function makeCaseFields(tests: TestCase[], casesSucceeded: number) : EmbedFieldData[] {
+    const fields = tests.map((_, index) => ({
+        name: `Case ${index + 1}`,
+        value: index > casesSucceeded
+            ? '⚠ Skipped' : (index === casesSucceeded ? '🔴 Failed' : '✅ Success'),
+        inline: true
+    }))
+
+    const maxCases = 20
+
+    if (tests.length > maxCases) {
+        const toRemove = tests.length - maxCases + 1
+
+        if (casesSucceeded > toRemove) {
+            // reduce success
+
+            fields.splice((casesSucceeded - toRemove) / 2, toRemove, {
+                name: '...',
+                value: '✅ Success',
+                inline: true
+            })
+        } else {
+            // reduce skip
+
+            fields.splice((tests.length - casesSucceeded - toRemove) / 2 + casesSucceeded, toRemove, {
+                name: '...',
+                value: '🔴 Failed',
+                inline: true
+            })
+        }
+    }
+
+    return fields
 }
 
 async function execute(message: Message, input: RunInput, problem: Problem) {
@@ -30,13 +68,19 @@ async function execute(message: Message, input: RunInput, problem: Problem) {
         let failureResult: RunResult | null = null
 
         for (const test of problem.tests) {
+            const load = async (x: string) => test.file
+                ? (await fs.readFile(path.resolve('data', x))).toString('utf8') : x
+
+            const testInput = await load(test.input)
+            const testOutput = await load(test.output)
+
             const run = await runProgram({
                 language: input.language,
                 source: input.source,
-                input: `${test.input}\n\n\n`
+                input: `${testInput}\n\n\n`
             })
 
-            if (run.status !== RunStatus.Success || !passedTestCase(run.result, test.output)) {
+            if (run.status !== RunStatus.Success || !passedTestCase(run.result, testOutput)) {
                 failureResult = run
                 break
             }
@@ -49,12 +93,7 @@ async function execute(message: Message, input: RunInput, problem: Problem) {
             .setColor(failureResult ? 'DARK_RED' : 'DARK_GREEN')
             .setTitle(`${problem.name} - Submission ${failureResult ? 'Failed' : 'Success'}`)
             .addFields([
-                ...problem.tests.map((_, index) => ({
-                    name: `Case ${index + 1}`,
-                    value: index > casesSucceeded
-                        ? '⚠ Skipped' : (index === casesSucceeded ? '🔴 Failed' : '✅ Success'),
-                    inline: true
-                })),
+                ...makeCaseFields(problem.tests, casesSucceeded),
                 ...(failureResult ? [
                     {
                         name: `Case ${casesSucceeded + 1} Problem`,
@@ -63,7 +102,7 @@ async function execute(message: Message, input: RunInput, problem: Problem) {
                                 case RunStatus.Success:
                                     return '🔴 Wrong Answer'
                                 case RunStatus.Error:
-                                    return '⚠ Error'
+                                    return '❌ Error'
                                 case RunStatus.Timeout:
                                     return '⏰ Timeout'
                                 case RunStatus.InternalError:

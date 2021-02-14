@@ -6,6 +6,7 @@ import { Callbacks } from '../callbacks'
 import ping from './ping'
 import post from './post'
 import judge from './judge'
+import reload from './reload'
 import compile from './compile'
 import rebuild from './rebuild'
 
@@ -13,6 +14,7 @@ export const commands = {
     ping,
     post,
     judge,
+    reload,
     compile,
     rebuild
 } as Record<string, CommandType>
