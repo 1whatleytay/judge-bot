@@ -52,7 +52,10 @@ export function extractProgram(content: string): Partial<RunInput> | null {
 
 export async function grabLanguage(
     message: Message, callbacks: Callbacks, callback: ExecuteCallback, source?: string, input?: string) {
-    const description = Object.values(properties).map(x => `${x.emoji} ${x.commonName}`).join('\n\n')
+    const description = Object.values(properties)
+        .filter(x => !x.hidden)
+        .map(x => `${x.emoji} ${x.commonName}`)
+        .join('\n\n')
 
     const embed = new MessageEmbed()
         .setColor('DARK_AQUA')
@@ -85,6 +88,10 @@ export async function grabLanguage(
 
     try {
         for (const x of Object.values(properties)) {
+            if (x.hidden) {
+                continue
+            }
+
             await prompt.react(x.emoji)
         }
     } catch { }

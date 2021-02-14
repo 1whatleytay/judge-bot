@@ -6,7 +6,8 @@ export enum Language {
     JavaScript = 'js',
     Go = 'go',
     Rust = 'rust',
-    Swift = 'swift'
+    Swift = 'swift',
+    Haskell = 'hs'
 }
 
 export interface LanguageProperties {
@@ -15,6 +16,8 @@ export interface LanguageProperties {
     imageName: string
 
     fileExtensions: string[] // preferred first
+
+    hidden?: boolean
 }
 
 export const properties: Record<Language, LanguageProperties> = {
@@ -36,7 +39,7 @@ export const properties: Record<Language, LanguageProperties> = {
     },
     [Language.CSharp]: {
         commonName: 'C#',
-        emoji: '#⃣',
+        emoji: '#️⃣',
 
         imageName: 'cs',
 
@@ -80,7 +83,19 @@ export const properties: Record<Language, LanguageProperties> = {
 
         imageName: 'swift',
 
+        hidden: true,
+
         fileExtensions: [ 'swift' ]
+    },
+    [Language.Haskell]: {
+        commonName: 'Haskell',
+        emoji: '🇭',
+
+        imageName: 'haskell',
+
+        hidden: true,
+
+        fileExtensions: [ 'hs', 'haskell' ]
     }
 }
 
