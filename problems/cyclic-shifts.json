@@ -1,0 +1,166 @@
+{
+  "name": "J4 Cyclic Shifts",
+  "channel": "810358288948396062",
+
+  "description": {
+    "general": "Thuc likes finding cyclic shifts of strings. A cyclic shift of a string is obtained by moving characters from the beginning of the string to the end of the string. We also consider a string to be a cyclic shift of itself. For example, the cyclic shifts of `ABCDE` are:\n```\nABCDE, BCDEA, CDEAB, DEABC, and EABCD.\n```\nGiven some text, T, and a string, S, determine if T contains a cyclic shift of S.",
+    "input": "The input will consist of exactly two lines containing only uppercase letters. The first line will be the text T, and the second line will be the string S. Each line will contain at most 1000 characters.\nFor 6 of the 15 available marks, S will be exactly 3 characters in length.",
+    "output": "Output yes if the text, T, contains a cyclic shift of the string, S. Otherwise, output no.",
+
+    "samples": [
+      {
+        "input": "ABCCDEABAA\nABCDE",
+        "output": "yes",
+        "explanation": "`CDEAB` is a cyclic shift of `ABCDE` and it is contained in the text `ABCCDEABAA`."
+      },
+      {
+        "input": "ABCDDEBCAB\nABA",
+        "output": "no",
+        "explanation": "The cyclic shifts of `ABA` are `ABA`, `BAA`, and `AAB`. None of these shifts are contained in the text `ABCDDEBCAB`."
+      }
+    ]
+  },
+
+  "tests": [
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.01.01.in",
+      "output": "cyclic-shifts/j4.01.01.out"
+    },
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.01.02.in",
+      "output": "cyclic-shifts/j4.01.02.out"
+    },
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.01.03.in",
+      "output": "cyclic-shifts/j4.01.03.out"
+    },
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.01.04.in",
+      "output": "cyclic-shifts/j4.01.04.out"
+    },
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.02.01.in",
+      "output": "cyclic-shifts/j4.02.01.out"
+    },
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.02.02.in",
+      "output": "cyclic-shifts/j4.02.02.out"
+    },
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.02.03.in",
+      "output": "cyclic-shifts/j4.02.03.out"
+    },
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.02.04.in",
+      "output": "cyclic-shifts/j4.02.04.out"
+    },
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.03.01.in",
+      "output": "cyclic-shifts/j4.03.01.out"
+    },
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.03.02.in",
+      "output": "cyclic-shifts/j4.03.02.out"
+    },
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.03.03.in",
+      "output": "cyclic-shifts/j4.03.03.out"
+    },
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.03.04.in",
+      "output": "cyclic-shifts/j4.03.04.out"
+    },
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.04.01.in",
+      "output": "cyclic-shifts/j4.04.01.out"
+    },
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.04.02.in",
+      "output": "cyclic-shifts/j4.04.02.out"
+    },
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.04.03.in",
+      "output": "cyclic-shifts/j4.04.03.out"
+    },
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.04.04.in",
+      "output": "cyclic-shifts/j4.04.04.out"
+    },
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.05.01.in",
+      "output": "cyclic-shifts/j4.05.01.out"
+    },
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.05.02.in",
+      "output": "cyclic-shifts/j4.05.02.out"
+    },
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.05.03.in",
+      "output": "cyclic-shifts/j4.05.03.out"
+    },
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.05.04.in",
+      "output": "cyclic-shifts/j4.05.04.out"
+    },
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.06.01.in",
+      "output": "cyclic-shifts/j4.06.01.out"
+    },
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.06.02.in",
+      "output": "cyclic-shifts/j4.06.02.out"
+    },
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.06.03.in",
+      "output": "cyclic-shifts/j4.06.03.out"
+    },
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.06.04.in",
+      "output": "cyclic-shifts/j4.06.04.out"
+    },
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.07.01.in",
+      "output": "cyclic-shifts/j4.07.01.out"
+    },
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.07.02.in",
+      "output": "cyclic-shifts/j4.07.02.out"
+    },
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.07.03.in",
+      "output": "cyclic-shifts/j4.07.03.out"
+    },
+    {
+      "file": true,
+      "input": "cyclic-shifts/j4.07.04.in",
+      "output": "cyclic-shifts/j4.07.04.out"
+    }
+  ]
+}

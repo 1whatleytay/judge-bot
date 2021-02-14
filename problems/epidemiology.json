@@ -1,0 +1,101 @@
+{
+  "name": "J2 Epidemiology",
+  "channel": "810358193002774569",
+
+  "description": {
+    "general": "People who study epidemiology use models to analyze the spread of disease. In this problem, we use a simple model.\nWhen a person has a disease, they infect exactly R other people but only on the very next day. No person is infected more than once. We want to determine when a total of more than P people have had the disease.",
+    "input": "There are three lines of input. Each line contains one positive integer. The first line contains the value of P. The second line contains N, the number of people who have the disease on Day 0. The third line contains the value of R. Assume that P ≤ 107 and N ≤ P and R ≤ 10.",
+    "output": "Output the number of the first day on which the total number of people who have had the disease is greater than P.",
+
+    "samples": [
+      {
+        "input": "750\n1\n5",
+        "output": "4",
+        "explanation": "The 1 person on Day 0 with the disease infects 5 people on Day 1. On Day 2, exactly 25 people are infected. On Day 3, exactly 125 people are infected. A total of 1 + 5 + 25 + 125 + 625 = 781 people have had the disease by the end of Day 4 and 781 > 750."
+      },
+      {
+        "input": "10\n2\n1",
+        "output": "5",
+        "explanation": "There are 2 people on Day 0 with the disease. On each other day, exactly 2 people are infected. By the end of Day 4, a total of exactly 10 people have had the disease and by the end of Day 5, more than 10 people have had the disease."
+      }
+    ]
+  },
+
+  "tests": [
+    {
+      "file": true,
+      "input": "epidemiology/j2.01.in",
+      "output": "epidemiology/j2.01.out"
+    },
+    {
+      "file": true,
+      "input": "epidemiology/j2.02.in",
+      "output": "epidemiology/j2.02.out"
+    },
+    {
+      "file": true,
+      "input": "epidemiology/j2.03.in",
+      "output": "epidemiology/j2.03.out"
+    },
+    {
+      "file": true,
+      "input": "epidemiology/j2.04.in",
+      "output": "epidemiology/j2.04.out"
+    },
+    {
+      "file": true,
+      "input": "epidemiology/j2.05.in",
+      "output": "epidemiology/j2.05.out"
+    },
+    {
+      "file": true,
+      "input": "epidemiology/j2.06.in",
+      "output": "epidemiology/j2.06.out"
+    },
+    {
+      "file": true,
+      "input": "epidemiology/j2.07.in",
+      "output": "epidemiology/j2.07.out"
+    },
+    {
+      "file": true,
+      "input": "epidemiology/j2.08.in",
+      "output": "epidemiology/j2.08.out"
+    },
+    {
+      "file": true,
+      "input": "epidemiology/j2.09.in",
+      "output": "epidemiology/j2.09.out"
+    },
+    {
+      "file": true,
+      "input": "epidemiology/j2.10.in",
+      "output": "epidemiology/j2.10.out"
+    },
+    {
+      "file": true,
+      "input": "epidemiology/j2.11.in",
+      "output": "epidemiology/j2.11.out"
+    },
+    {
+      "file": true,
+      "input": "epidemiology/j2.12.in",
+      "output": "epidemiology/j2.12.out"
+    },
+    {
+      "file": true,
+      "input": "epidemiology/j2.13.in",
+      "output": "epidemiology/j2.13.out"
+    },
+    {
+      "file": true,
+      "input": "epidemiology/j2.14.in",
+      "output": "epidemiology/j2.14.out"
+    },
+    {
+      "file": true,
+      "input": "epidemiology/j2.15.in",
+      "output": "epidemiology/j2.15.out"
+    }
+  ]
+}

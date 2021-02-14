@@ -1,0 +1,96 @@
+{
+  "name": "J3 Art",
+  "channel": "810358233323012097",
+
+  "description": {
+    "general": "Mahima has been experimenting with a new style of art. She stands in front of a canvas and, using her brush, flicks drops of paint onto the canvas. When she thinks she has created a masterpiece, she uses her 3D printer to print a frame to surround the canvas.\nYour job is to help Mahima by determining the coordinates of the smallest possible rectangular frame such that each drop of paint lies inside the frame. Points on the frame are not considered inside the frame.",
+    "input": "The first line of input contains the number of drops of paint, N, where 2 \uF8FF N \uF8FF 100 and N is an integer. Each of the next N lines contain exactly two positive integers X and Y separated by one comma (no spaces). Each of these pairs of integers represents the coordinates of a drop of paint on the canvas. Assume that X < 100 and Y < 100, and that there will be at least two distinct points. The coordinates (0, 0) represent the bottom-left corner of the canvas.\n\nFor 12 of the 15 available marks, X and Y will both be two-digit integers.",
+    "output": "Output two lines. Each line must contain exactly two non-negative integers separated by a single comma (no spaces). The first line represents the coordinates of the bottom-left corner of the rectangular frame. The second line represents the coordinates of the top-right corner of the rectangular frame.",
+
+    "samples": [
+      {
+        "input": "5\n44,62\n34,69\n24,78\n42,44\n64,10",
+        "output": "23,9\n65,79",
+        "explanation": "The bottom-left corner of the frame is (23, 9). Notice that if the bottom-left corner is moved up, the paint drop at (64, 10) will not be inside the frame. (See the diagram on the next page.) If the corner is moved right, the paint drop at (24, 78) will not be inside the frame. If the corner is moved down or left, then the frame will be larger and no longer the smallest rectangle containing all the drops of paint. A similar argument can be made regarding the top-right corner of the frame."
+      }
+    ]
+  },
+
+  "tests": [
+    {
+      "file": true,
+      "input": "art/j3.01.in",
+      "output": "art/j3.01.out"
+    },
+    {
+      "file": true,
+      "input": "art/j3.02.in",
+      "output": "art/j3.02.out"
+    },
+    {
+      "file": true,
+      "input": "art/j3.03.in",
+      "output": "art/j3.03.out"
+    },
+    {
+      "file": true,
+      "input": "art/j3.04.in",
+      "output": "art/j3.04.out"
+    },
+    {
+      "file": true,
+      "input": "art/j3.05.in",
+      "output": "art/j3.05.out"
+    },
+    {
+      "file": true,
+      "input": "art/j3.06.in",
+      "output": "art/j3.06.out"
+    },
+    {
+      "file": true,
+      "input": "art/j3.07.in",
+      "output": "art/j3.07.out"
+    },
+    {
+      "file": true,
+      "input": "art/j3.08.in",
+      "output": "art/j3.08.out"
+    },
+    {
+      "file": true,
+      "input": "art/j3.09.in",
+      "output": "art/j3.09.out"
+    },
+    {
+      "file": true,
+      "input": "art/j3.10.in",
+      "output": "art/j3.10.out"
+    },
+    {
+      "file": true,
+      "input": "art/j3.11.in",
+      "output": "art/j3.11.out"
+    },
+    {
+      "file": true,
+      "input": "art/j3.12.in",
+      "output": "art/j3.12.out"
+    },
+    {
+      "file": true,
+      "input": "art/j3.13.in",
+      "output": "art/j3.13.out"
+    },
+    {
+      "file": true,
+      "input": "art/j3.14.in",
+      "output": "art/j3.14.out"
+    },
+    {
+      "file": true,
+      "input": "art/j3.15.in",
+      "output": "art/j3.15.out"
+    }
+  ]
+}
