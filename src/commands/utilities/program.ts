@@ -27,8 +27,8 @@ export function parseSource(content: string): Source[] {
         }
         
         results.push({
-            source: result.groups.source,
-            language: result.groups.language
+            source: result.groups.source.trim(),
+            language: result.groups.language.trim()
         })
     }
 
