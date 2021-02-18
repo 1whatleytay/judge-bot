@@ -119,6 +119,10 @@ async function execute(message: Message, input: RunInput, problem: Problem) {
                     ] : [])
                 ] : [])
             ])
+            .setFooter(
+                `Submitted by ${message.author.username}#${message.author.discriminator}.`,
+                message.author.avatarURL() ?? undefined
+            )
             
         await dropIndicator(message)
 

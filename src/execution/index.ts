@@ -59,7 +59,7 @@ export async function runProgram(program: RunInput): Promise<RunResult> {
                     `${sourceFile}:/mnt/source.${program.language}:ro`,
                     `${inputFile}:/mnt/input.txt:ro`
                 ],
-                Memory: 1024 * 1024 * 128,
+                Memory: 1024 * 1024 * 512,
                 MemorySwap: 0,
                 CpuPeriod: 100000,
                 CpuQuota: 100000
