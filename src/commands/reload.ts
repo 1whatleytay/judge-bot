@@ -3,7 +3,7 @@ import { MessageEmbed } from 'discord.js'
 import { Context } from './utilities/context'
 import { addIndicator, dropIndicator } from './utilities/indicator'
 
-import { problems, reloadProblems, verify } from '../problems'
+import { problems, reloadProblems } from '../problems'
 
 export default async ({ message }: Context) => {
     if (!message.member || !message.member.hasPermission('ADMINISTRATOR')) {
@@ -15,11 +15,8 @@ export default async ({ message }: Context) => {
 
     await reloadProblems()
 
-    const problemDetails = await Promise.all(
-        problems.map(async problem => ({ problem, okay: await verify(problem) })))
-
-    const description = problemDetails
-        .map(x => ` ${x.okay ? '✅' : '🔴'} ${x.problem.name} (<#${x.problem.channel}>)`)
+    const description = problems
+        .map(x => ` ✅   ${x.name} (<#${x.channel}>)`)
         .join('\n')
 
     const embed = new MessageEmbed()

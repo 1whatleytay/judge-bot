@@ -1,4 +1,5 @@
 {
+  "id": "art",
   "name": "J3 Art",
   "channel": "810358233323012097",
 
@@ -18,79 +19,9 @@
 
   "tests": [
     {
-      "file": true,
-      "input": "art/j3.01.in",
-      "output": "art/j3.01.out"
-    },
-    {
-      "file": true,
-      "input": "art/j3.02.in",
-      "output": "art/j3.02.out"
-    },
-    {
-      "file": true,
-      "input": "art/j3.03.in",
-      "output": "art/j3.03.out"
-    },
-    {
-      "file": true,
-      "input": "art/j3.04.in",
-      "output": "art/j3.04.out"
-    },
-    {
-      "file": true,
-      "input": "art/j3.05.in",
-      "output": "art/j3.05.out"
-    },
-    {
-      "file": true,
-      "input": "art/j3.06.in",
-      "output": "art/j3.06.out"
-    },
-    {
-      "file": true,
-      "input": "art/j3.07.in",
-      "output": "art/j3.07.out"
-    },
-    {
-      "file": true,
-      "input": "art/j3.08.in",
-      "output": "art/j3.08.out"
-    },
-    {
-      "file": true,
-      "input": "art/j3.09.in",
-      "output": "art/j3.09.out"
-    },
-    {
-      "file": true,
-      "input": "art/j3.10.in",
-      "output": "art/j3.10.out"
-    },
-    {
-      "file": true,
-      "input": "art/j3.11.in",
-      "output": "art/j3.11.out"
-    },
-    {
-      "file": true,
-      "input": "art/j3.12.in",
-      "output": "art/j3.12.out"
-    },
-    {
-      "file": true,
-      "input": "art/j3.13.in",
-      "output": "art/j3.13.out"
-    },
-    {
-      "file": true,
-      "input": "art/j3.14.in",
-      "output": "art/j3.14.out"
-    },
-    {
-      "file": true,
-      "input": "art/j3.15.in",
-      "output": "art/j3.15.out"
+      "type": "files",
+      "input": "j3[.](?<case>\\d+[.]\\d+)[.]in",
+      "output": "j3[.](?<case>\\d+[.]\\d+)[.]out"
     }
   ]
 }

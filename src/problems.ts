@@ -1,5 +1,5 @@
-import fs from 'fs/promises'
 import path from 'path'
+import fs from 'fs/promises'
 
 export interface SampleCase {
     input: string
@@ -7,11 +7,20 @@ export interface SampleCase {
     explanation?: string
 }
 
-export interface TestCase {
+export interface TestCaseDescription {
+    type?: 'text' | 'file' | 'files'
+    digital?: boolean
+
     input: string
     output: string
+}
 
-    file?: boolean
+export interface TestCase {
+    file: boolean
+    digital?: boolean
+
+    input: string
+    output: string
 }
 
 export interface ProblemDescription {
@@ -23,36 +32,85 @@ export interface ProblemDescription {
 }
 
 export interface Problem {
+    id?: string
     name: string
     channel: string
     example?: boolean
 
     description: ProblemDescription
 
-    tests: TestCase[]
+    tests: TestCaseDescription[]
 }
 
-// Just check for missing files or duplicate files.
-export async function verify(problem: Problem): Promise<boolean> {
-    let files = [ ]
+export async function getTestCases(problem: Problem): Promise<TestCase[]> {
+    const cases: TestCase[] = []
+
+    let files: string[] | undefined
 
     for (const test of problem.tests) {
-        if (test.file) {
-            const input = path.resolve('data', test.input)
-            const output = path.resolve('data', test.output)
+        if ((test.type === 'files' || test.type === 'file') && !problem.id) {
+            throw new Error('Needs ID to load files.')
+        }
 
-            files.push(input, output)
-
-            try {
-                await fs.access(input)
-                await fs.access(output)
-            } catch (e) {
-                return false
+        if (test.type === 'files') {
+            // initialize once
+            if (!files) {
+                files = await fs.readdir(path.resolve('data', problem.id!))
             }
+
+            const inputRegex = new RegExp(test.input)
+            const outputRegex = new RegExp(test.output)
+            const data: Record<string, { input?: string, output?: string }> = { }
+
+            const getOrCreate = (c: string): Partial<TestCase> => {
+                let entry = data[c]
+
+                if (!entry) {
+                    entry = { }
+                    data[c] = entry
+                }
+
+                return entry
+            }
+
+            for (const file of files) {
+                const inputMatch = inputRegex.exec(file)
+                const outputMatch = outputRegex.exec(file)
+
+                if (inputMatch && inputMatch.groups && inputMatch.groups.case) {
+                    getOrCreate(inputMatch.groups.case).input = file
+                }
+
+                if (outputMatch && outputMatch.groups && outputMatch.groups.case) {
+                    getOrCreate(outputMatch.groups.case).output = file
+                }
+            }
+
+            for (const part of Object.values(data)) {
+                if (!part.input || !part.output) {
+                    throw new Error(`Matched one file ${part.input || part.output || '?'} but not matching file.`)
+                }
+
+                cases.push({
+                    file: true,
+                    digital: test.digital,
+
+                    input: part.input,
+                    output: part.output
+                })
+            }
+        } else {
+            cases.push({
+                file: test.type === 'file',
+                digital: test.digital,
+
+                input: test.input,
+                output: test.output
+            })
         }
     }
 
-    return new Set(files).size === files.length
+    return cases
 }
 
 export let problems: Problem[]

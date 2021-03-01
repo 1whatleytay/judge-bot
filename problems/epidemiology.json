@@ -1,4 +1,5 @@
 {
+  "id": "epidemiology",
   "name": "J2 Epidemiology",
   "channel": "810358193002774569",
 
@@ -23,79 +24,9 @@
 
   "tests": [
     {
-      "file": true,
-      "input": "epidemiology/j2.01.in",
-      "output": "epidemiology/j2.01.out"
-    },
-    {
-      "file": true,
-      "input": "epidemiology/j2.02.in",
-      "output": "epidemiology/j2.02.out"
-    },
-    {
-      "file": true,
-      "input": "epidemiology/j2.03.in",
-      "output": "epidemiology/j2.03.out"
-    },
-    {
-      "file": true,
-      "input": "epidemiology/j2.04.in",
-      "output": "epidemiology/j2.04.out"
-    },
-    {
-      "file": true,
-      "input": "epidemiology/j2.05.in",
-      "output": "epidemiology/j2.05.out"
-    },
-    {
-      "file": true,
-      "input": "epidemiology/j2.06.in",
-      "output": "epidemiology/j2.06.out"
-    },
-    {
-      "file": true,
-      "input": "epidemiology/j2.07.in",
-      "output": "epidemiology/j2.07.out"
-    },
-    {
-      "file": true,
-      "input": "epidemiology/j2.08.in",
-      "output": "epidemiology/j2.08.out"
-    },
-    {
-      "file": true,
-      "input": "epidemiology/j2.09.in",
-      "output": "epidemiology/j2.09.out"
-    },
-    {
-      "file": true,
-      "input": "epidemiology/j2.10.in",
-      "output": "epidemiology/j2.10.out"
-    },
-    {
-      "file": true,
-      "input": "epidemiology/j2.11.in",
-      "output": "epidemiology/j2.11.out"
-    },
-    {
-      "file": true,
-      "input": "epidemiology/j2.12.in",
-      "output": "epidemiology/j2.12.out"
-    },
-    {
-      "file": true,
-      "input": "epidemiology/j2.13.in",
-      "output": "epidemiology/j2.13.out"
-    },
-    {
-      "file": true,
-      "input": "epidemiology/j2.14.in",
-      "output": "epidemiology/j2.14.out"
-    },
-    {
-      "file": true,
-      "input": "epidemiology/j2.15.in",
-      "output": "epidemiology/j2.15.out"
+      "type": "files",
+      "input": "j2[.](?<case>\\d+)[.]in",
+      "output": "j2[.](?<case>\\d+)[.]out"
     }
   ]
 }

@@ -22,13 +22,13 @@ export function parseSource(content: string): Source[] {
     while (true) {
         const result = regex.exec(content)
 
-        if (!result || !result.groups) {
+        if (!result || !result.groups || !result.groups.source) {
             break
         }
         
         results.push({
             source: result.groups.source.trim(),
-            language: result.groups.language.trim()
+            language: result.groups.language?.trim()
         })
     }
 

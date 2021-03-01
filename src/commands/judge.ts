@@ -4,33 +4,41 @@ import { Context } from './utilities/context'
 import { runCommand, sanitize } from './utilities/program'
 import { addIndicator, dropIndicator } from './utilities/indicator'
 
-import { Problem, problems, TestCase } from '../problems'
+import { getTestCases, Problem, problems } from '../problems'
 
 import { RunInput, runProgram, RunResult, RunStatus } from '../execution'
 
 import fs from 'fs/promises'
 import path from 'path'
 
-function passedTestCase(result: string, answer: string) {
+function passedTestCase(result: string, answer: string, digital: boolean) {
     const resultParts = result.trimRight().split('\n').map(x => x.trimRight())
     const answerParts = answer.trimRight().split('\n').map(x => x.trimRight())
 
-    return (resultParts.length === answerParts.length)
-        && !resultParts.some((x, i) => x !== answerParts[i])
+    try {
+        return (resultParts.length === answerParts.length) && !resultParts.some((x, i) => digital
+            ? (parseFloat(x) !== parseFloat(answerParts[i])) : (x !== answerParts[i]))
+    } catch {
+        return false
+    }
 }
 
-function makeCaseFields(tests: TestCase[], casesSucceeded: number) : EmbedFieldData[] {
-    const fields = tests.map((_, index) => ({
-        name: `Case ${index + 1}`,
-        value: index > casesSucceeded
-            ? '⚠ Skipped' : (index === casesSucceeded ? '🔴 Failed' : '✅ Success'),
-        inline: true
-    }))
+function makeCaseFields(totalTests: number, casesSucceeded: number) : EmbedFieldData[] {
+    const fields = [ ]
+
+    for (let a = 0; a < totalTests; a++) {
+        fields.push({
+            name: `Case ${a + 1}`,
+            value: a > casesSucceeded
+                ? '⚠ Skipped' : (a === casesSucceeded ? '🔴 Failed' : '✅ Success'),
+            inline: true
+        })
+    }
 
     const maxCases = 20
 
-    if (tests.length > maxCases) {
-        const toRemove = tests.length - maxCases + 1
+    if (totalTests > maxCases) {
+        const toRemove = totalTests - maxCases + 1
 
         if (casesSucceeded > toRemove) {
             // reduce success
@@ -43,7 +51,7 @@ function makeCaseFields(tests: TestCase[], casesSucceeded: number) : EmbedFieldD
         } else {
             // reduce skip
 
-            fields.splice((tests.length - casesSucceeded - toRemove) / 2 + casesSucceeded, toRemove, {
+            fields.splice((totalTests - casesSucceeded - toRemove) / 2 + casesSucceeded, toRemove, {
                 name: '...',
                 value: '⚠ Skipped',
                 inline: true
@@ -67,9 +75,11 @@ async function execute(message: Message, input: RunInput, problem: Problem) {
 
         let failureResult: RunResult | null = null
 
-        for (const test of problem.tests) {
+        const tests = await getTestCases(problem)
+
+        for (const test of tests) {
             const load = async (x: string) => test.file
-                ? (await fs.readFile(path.resolve('data', x))).toString('utf8') : x
+                ? (await fs.readFile(path.resolve('data', problem.id!, x))).toString('utf8') : x
 
             const testInput = await load(test.input)
             const testOutput = await load(test.output)
@@ -80,7 +90,7 @@ async function execute(message: Message, input: RunInput, problem: Problem) {
                 input: `${testInput}\n\n\n`
             })
 
-            if (run.status !== RunStatus.Success || !passedTestCase(run.result, testOutput)) {
+            if (run.status !== RunStatus.Success || !passedTestCase(run.result, testOutput, test.digital || false)) {
                 failureResult = run
                 break
             }
@@ -93,7 +103,7 @@ async function execute(message: Message, input: RunInput, problem: Problem) {
             .setColor(failureResult ? 'DARK_RED' : 'DARK_GREEN')
             .setTitle(`${problem.name} - Submission ${failureResult ? 'Failed' : 'Success'}`)
             .addFields([
-                ...makeCaseFields(problem.tests, casesSucceeded),
+                ...makeCaseFields(tests.length, casesSucceeded),
                 ...(failureResult ? [
                     {
                         name: `Case ${casesSucceeded + 1} Problem`,

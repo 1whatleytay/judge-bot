@@ -1,0 +1,32 @@
+{
+  "id": "modern-art",
+  "name": "J5/S2 Modern Art",
+  "channel": "816027148820676649",
+
+  "description": {
+    "general": "A new and upcoming artist has a unique way to create checkered patterns. The idea is to use an M-by-N canvas which is initially entirely black. Then the artist repeatedly chooses a row or column and runs their magic brush along the row or column. The brush changes the colour of each cell in the row or column from black to gold or gold to black.\n\nGiven the artist’s choices, your job is to determine how much gold appears in the pattern determined by these choices.",
+    "input": "The first line of input will be a positive integer M. The second line of input will be a positive integer N. The third line of input will be a positive integer K. The remaining input will be K lines giving the choices made by the artist. Each of these lines will either be R followed by a single space and then an integer which is a row number, or C followed by a single space and then an integer which is a column number. Rows are numbered top down from 1 to M. Columns are numbered left to right from 1 to N.",
+    "output": "Output one non-negative integer which is equal to the number of cells that are gold in the\npattern determined by the artist’s choices.",
+
+    "samples": [
+      {
+        "input": "3\n3\n2\nR 1\nC 1",
+        "output": "4",
+        "explanation": "After running the brush along the first row, the canvas looks like this:\n```\nGGG\nBBB\nBBB\n```\n\nThen after running the brush along the first column, four cells are gold in the final pattern\ndetermined by the artist’s choices:\n```\nBGG\nGBB\nGBB\n```"
+      },
+      {
+        "input": "4\n5\n7\nR 3\nC 1\nC 2\nR 2\nR 2\nC 1\nR 4",
+        "output": "10",
+        "explanation": "Ten cells are gold in the final pattern determined by the artist’s choices:\n```\nBGBBB\nBGBBB\nGBGGG\nGBGGG\n```"
+      }
+    ]
+  },
+
+  "tests": [
+    {
+      "type": "files",
+      "input": "j5.(?<case>\\d+).in",
+      "output": "j5.(?<case>\\d+).out"
+    }
+  ]
+}

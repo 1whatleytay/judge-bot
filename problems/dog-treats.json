@@ -1,4 +1,5 @@
 {
+  "id": "dog-treats",
   "name": "J1 Dog Treats",
   "channel": "810358110157406238",
 
@@ -23,69 +24,9 @@
 
   "tests": [
     {
-      "file": true,
-      "input": "dog-treats/j1.01.01.in",
-      "output": "dog-treats/j1.01.01.out"
-    },
-    {
-      "file": true,
-      "input": "dog-treats/j1.01.02.in",
-      "output": "dog-treats/j1.01.02.out"
-    },
-    {
-      "file": true,
-      "input": "dog-treats/j1.01.03.in",
-      "output": "dog-treats/j1.01.03.out"
-    },
-    {
-      "file": true,
-      "input": "dog-treats/j1.02.01.in",
-      "output": "dog-treats/j1.02.01.out"
-    },
-    {
-      "file": true,
-      "input": "dog-treats/j1.02.02.in",
-      "output": "dog-treats/j1.02.02.out"
-    },
-    {
-      "file": true,
-      "input": "dog-treats/j1.02.03.in",
-      "output": "dog-treats/j1.02.03.out"
-    },
-    {
-      "file": true,
-      "input": "dog-treats/j1.03.01.in",
-      "output": "dog-treats/j1.03.01.out"
-    },
-    {
-      "file": true,
-      "input": "dog-treats/j1.03.02.in",
-      "output": "dog-treats/j1.03.02.out"
-    },
-    {
-      "file": true,
-      "input": "dog-treats/j1.03.03.in",
-      "output": "dog-treats/j1.03.03.out"
-    },
-    {
-      "file": true,
-      "input": "dog-treats/j1.04.01.in",
-      "output": "dog-treats/j1.04.01.out"
-    },
-    {
-      "file": true,
-      "input": "dog-treats/j1.04.02.in",
-      "output": "dog-treats/j1.04.02.out"
-    },
-    {
-      "file": true,
-      "input": "dog-treats/j1.04.03.in",
-      "output": "dog-treats/j1.04.03.out"
-    },
-    {
-      "file": true,
-      "input": "dog-treats/j1.04.04.in",
-      "output": "dog-treats/j1.04.04.out"
+      "type": "files",
+      "input": "j1[.](?<case>\\d+[.]\\d+)[.]in",
+      "output": "j1[.](?<case>\\d+[.]\\d+)[.]out"
     }
   ]
 }
