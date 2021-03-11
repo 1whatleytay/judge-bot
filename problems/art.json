@@ -20,8 +20,8 @@
   "tests": [
     {
       "type": "files",
-      "input": "j3[.](?<case>\\d+[.]\\d+)[.]in",
-      "output": "j3[.](?<case>\\d+[.]\\d+)[.]out"
+      "input": "j3[.](?<case>\\d+)[.]in",
+      "output": "j3[.](?<case>\\d+)[.]out"
     }
   ]
 }

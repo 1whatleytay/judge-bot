@@ -1,0 +1,32 @@
+{
+  "id": "exactly-electrical",
+  "name": "J3 Exactly Electrical",
+  "channel": "819659170553790474",
+
+  "description": {
+    "general": "You live in Grid City, which is composed of integer-numbered streets which run east-west (parallel to the \uD835\uDC65-axis) and integer-numbered avenues which run north-south (parallel to the \uD835\uDC66-axis). The streets and avenues have infinite length, and there is a street for every integer \uD835\uDC66-coordinate and an avenue for every \uD835\uDC65-coordinate. All intersections are labelled by their integer coordinates: for example, avenue 7 and street −3 intersect at (7,−3).\n\nYou drive a special electric car which uses up one unit of electrical charge moving between adjacent intersections: that is, moving either north or south to the next street, or moving east or west to the next avenue). Until your battery runs out, at each intersection, your car can turn left, turn right, go straight through, or make a U-turn. You may visit the same intersection multiple times on the same trip.\n\nSuppose you know your starting intersection, your destination intersection and the number of units of electrical charge in your battery. Determine whether you can travel from the starting intersection to the destination intersection using the charge available to you in such a way that your battery is empty when you reach your destination.",
+    "input": "The input consists of three lines. The first line contains \uD835\uDC4E followed by \uD835\uDC4F, indicating the starting coordinate (\uD835\uDC4E,\uD835\uDC4F) (−1000≤\uD835\uDC4E≤1000;−1000≤\uD835\uDC4F≤1000).\n\nThe second line contains \uD835\uDC50 followed by \uD835\uDC51, indicating the destination coordinate (\uD835\uDC50,\uD835\uDC51) (−1000≤\uD835\uDC50≤1000;−1000≤\uD835\uDC51≤1000).\n\nThe third line contains an integer \uD835\uDC61 (0≤\uD835\uDC61≤10000) indicating the initial number of units of electrical charge of your battery.\n\nFor 3 of the 15 available marks, 0≤\uD835\uDC4E,\uD835\uDC4F,\uD835\uDC50,\uD835\uDC51≤2.\n\nFor an additional 3 of the 15 marks available, \uD835\uDC61≤8.",
+    "output": "Output Y if it is possible to move from the starting coordinate to the destination coordinate using exactly \uD835\uDC61 units of electrical charge. Otherwise output N.",
+
+    "samples": [
+      {
+        "input": "3 4\n3 3\n3",
+        "output": "Y",
+        "explanation": "One possibility is to travel from (3,4) to (4,4) to (4,3) to (3,3)."
+      },
+      {
+        "input": "10 2\n10 4\n5",
+        "output": "N",
+        "explanation": "It is possible to get from (10,2) to (10,4) using exactly 2 units of electricity, by going north 2 units.\n\nIt is also possible to travel using 4 units of electricity as in the following sequence:\n\n(10,2) → (10,3) → (11,3) → (11,4) → (10,4).\n\nIt is also possible to travel using 5 units of electricity from (10,2) to (11,4) by the following sequence:\n\n(10,2) → (10,3) → (11,3) → (12,3) → (12,4) → (11,4).\n\nIt is not possible to move via any path of length 5 from (10,2) to (10,4), however."
+      }
+    ]
+  },
+
+  "tests": [
+    {
+      "type": "files",
+      "input": "j3[.](?<case>\\d+)[.]in",
+      "output": "j3[.](?<case>\\d+)[.]out"
+    }
+  ]
+}

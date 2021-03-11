@@ -1,0 +1,26 @@
+{
+  "id": "shifty-sum",
+  "name": "J2 Shift Sum",
+  "channel": "819659050923851846",
+
+  "description": {
+    "general": "Suppose we have a number like 12. Let's define shifting a number to mean adding a zero at the end. For example, if we shift that number once, we get the number 120. If we shift the number again we get the number 1200. We can shift the number as many times as we want.\n\nIn this problem you will be calculating a shifty sum, which is the sum of a number and the numbers we get by shifting. Specifically, you will be given the starting number \uD835\uDC41 and a non-negative integer \uD835\uDC58. You must add together \uD835\uDC41 and all the numbers you get by shifting a total of \uD835\uDC58 times.\n\nFor example, the shifty sum when \uD835\uDC41 is 12 and \uD835\uDC58 is 1 is: 12+120=132. As another example, the shifty sum when \uD835\uDC41 is 12 and \uD835\uDC58 is 3 is 12+120+1200+12000=13332.",
+    "input": "The first line of input contains the number \uD835\uDC41 (1≤\uD835\uDC41≤10000). The second line of input contains \uD835\uDC58, the number of times to shift \uD835\uDC41 (0≤\uD835\uDC58≤5).",
+    "output": "Output the integer which is the shifty sum of \uD835\uDC41 by \uD835\uDC58.",
+
+    "samples": [
+      {
+        "input": "12\n3",
+        "output": "13332"
+      }
+    ]
+  },
+
+  "tests": [
+    {
+      "type": "files",
+      "input": "j2[.](?<case>\\d+)[.]in",
+      "output": "j2[.](?<case>\\d+)[.]out"
+    }
+  ]
+}

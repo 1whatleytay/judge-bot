@@ -1,0 +1,30 @@
+{
+  "id": "quadrant-selection",
+  "name": "J1 Quadrant Selection",
+  "channel": "819658918443089990",
+
+  "description": {
+    "general": "A common problem in mathematics is to determine which quadrant a given point lies in. There are four quadrants, numbered from 1 to 4.\n\nFor example, the point \uD835\uDC34, which is at coordinates (12,5) lies in quadrant 1 since both its \uD835\uDC65 and \uD835\uDC66 values are positive, and point \uD835\uDC35 lies in quadrant 2 since its \uD835\uDC65 value is negative and its \uD835\uDC66 value is positive.\n\nYour job is to take a point and determine the quadrant it is in. You can assume that neither of the two coordinates will be 0.",
+    "input": "The first line of input contains the integer \uD835\uDC65 (−1000≤\uD835\uDC65≤1000;\uD835\uDC65≠0). The second line of input contains the integer \uD835\uDC66 (−1000≤\uD835\uDC66≤1000;\uD835\uDC66≠0).",
+    "output": "Output the quadrant number (1, 2, 3 or 4) for the point (\uD835\uDC65,\uD835\uDC66).",
+
+    "samples": [
+      {
+        "input": "12\n5",
+        "output": "1"
+      },
+      {
+        "input": "9\n-13",
+        "output": "4"
+      }
+    ]
+  },
+
+  "tests": [
+    {
+      "type": "files",
+      "input": "j1[.](?<case>\\d+)[.]in",
+      "output": "j1[.](?<case>\\d+)[.]out"
+    }
+  ]
+}
