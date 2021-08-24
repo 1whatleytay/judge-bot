@@ -86,19 +86,32 @@ export async function getTestCases(problem: Problem): Promise<TestCase[]> {
                 }
             }
 
-            for (const part of Object.values(data)) {
+            const total: { k: string, t: TestCase }[] = []
+
+            for (const key of Object.keys(data)) {
+                const part = data[key]
+
                 if (!part.input || !part.output) {
                     throw new Error(`Matched one file ${part.input || part.output || '?'} but not matching file.`)
                 }
 
-                cases.push({
-                    file: true,
-                    digital: test.digital,
+                total.push({
+                    k: key,
+                    t: {
+                        file: true,
+                        digital: test.digital,
 
-                    input: part.input,
-                    output: part.output
+                        input: part.input,
+                        output: part.output
+                    }
                 })
             }
+
+            total.sort((a, b) => {
+                const ai = parseInt(a.k, 10), bi = parseInt(b.k, 10);
+                return (ai - bi)
+                    || (a.k > b.k) - (b.k > a.k);
+            }).map(x => x.value || "")
         } else {
             cases.push({
                 file: test.type === 'file',
